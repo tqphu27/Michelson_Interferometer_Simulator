@@ -134,10 +134,8 @@ class MichelsonSimulation:
         
     def getInterferenceMode(self):
         mode = self.islocalInterference
-        if mode:
-            return 'local interference'
-        else:
-            return 'non-local interference'
+   
+        return 'non-local interference'
     
     def getScreen(self):
         return self.screen
@@ -215,27 +213,4 @@ class MichelsonSimulation:
         else:
             raise Exception('Mode is local interference now, please change mode')
     
-    # This is the interference pattern calculation for local interference.
-    # The output is a list, and the term is like '[position on screen, wavelength, intensity]'
-    # def localInterference(self):
-    #     if self.islocalInterference:
-    #         image_list = self.getImageSourceList()       # get imformation of image-source-pair
-    #         screen = self.screen                          # get point list of screen
-    #         pattern = []
-    #         for point in screen:
-    #             for coherentSource in image_list:         # calculate for each source-screenPoint combination
-    #                 point1, point2, wavelength, source_intensity = coherentSource
-    #                 intervalVector = point1 - point2      # derive vector from one coherent image source to the other
-
-    #                 # since specified screenPoint gives a pair of parallel light, 
-    #                 # we follow screenPoint-lightDirection-phaseDifference calculation, 
-    #                 # type(point) == np.ndarray, and the term denotes relative distance.
-    #                 direction = np.array(point)
-    #                 delta = (10 ** 7) * 2 * math.pi * np.inner(intervalVector, direction) / np.linalg.norm(direction) \
-    #                             / wavelength     # derive phase differnce, wavelength is in nm=10^{-7}cm
-
-    #                 intensity = 2 + 2 * math.cos(delta)
-    #                 pattern.append([point, wavelength, intensity*source_intensity])              # forming one term, not interfere with others
-    #         return pattern
-    #     else:
-    #         raise Exception('Mode is nonlocal interference now, please change mode')
+    

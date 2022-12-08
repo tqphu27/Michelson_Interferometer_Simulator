@@ -45,29 +45,17 @@ class ScreenCanvas(MyMplCanvas):
         #initialize a simulation
         self.simulation = MichelsonSimulation()
         self.simulation.initialMirrorG([0, 0, 0], [-1, 1, 0])
-        self.simulation.initialMirrorM1([0, 100, 0], [1e-3, -1, 0])
-        self.simulation.initialMirrorM2([100, 0, 0], [-1, 1e-3, 0])
+        self.simulation.initialMirrorM1([0, 100, 0], [0, -1, 0])
+        self.simulation.initialMirrorM2([100, 0, 0], [-1, 0, 0])
         self.simulation.insertSource([-20, 0, 0], 635, 20)
-        self.simulation.changeToNonlocal()
+        self.simulation.changeTo()
 
         MyMplCanvas.__init__(self, *args, **kwargs)
 
     def compute_initial_figure(self):
         showPattern(self.axes, self.simulation, self.is_colored)
     
-    # def changeLocality(self, text):
-    #     if text=='local' and self.simulation.islocalInterference==False:
-    #         self.simulation.islocalInterference = True
-    #         self.simulation.changeToLocal()
-    #         self.axes.cla()
-    #         showPattern(self.axes, self.simulation, self.is_colored)
-    #         self.draw()
-    #     elif text=='nonlocal' and self.simulation.islocalInterference==True:
-    #         self.simulation.islocalInterference = False
-    #         self.simulation.changeToNonlocal()
-    #         self.axes.cla()
-    #         showPattern(self.axes, self.simulation, self.is_colored)
-    #         self.draw()   
+
 
     def changeColor(self, text):
         if text=='colored' and self.is_colored==False:
@@ -125,12 +113,6 @@ class InputdialogDemo(QWidget):
         super(InputdialogDemo,self).__init__(parent)
         layout=QFormLayout()
 
-        # self.btn_loc=QPushButton("Locality?")
-        # self.btn_loc.clicked.connect(self.getLoc)
-        # self.le_loc=QLineEdit()
-        # self.le_loc.setText('nonlocal')
-        # layout.addRow(self.btn_loc,self.le_loc)
-
         self.btn_color=QPushButton("Colored or mono. screen?")
         self.btn_color.clicked.connect(self.getColor)
         self.le_color=QLineEdit()
@@ -152,7 +134,7 @@ class InputdialogDemo(QWidget):
         self.btn_M1=QPushButton("M1 angle:")
         self.btn_M1.clicked.connect(self.getM1)
         self.le_M1=QLineEdit()
-        self.le_M1.setText('1e-3')
+        self.le_M1.setText('0')
         layout.addRow(self.btn_M1,self.le_M1)
         
         self.btn_M2_dir=QPushButton("M2 location:")
@@ -164,17 +146,12 @@ class InputdialogDemo(QWidget):
         self.btn_M2=QPushButton("M2 angle:")
         self.btn_M2.clicked.connect(self.getM2)
         self.le_M2=QLineEdit()
-        self.le_M2.setText('1e-3')
+        self.le_M2.setText('0')
         layout.addRow(self.btn_M2,self.le_M2)
 
         self.setLayout(layout)
         self.setWindowTitle("Input Dialog")
 
-    # def getLoc(self):
-    #     items = ("local","nonlocal")
-    #     item, ok = QInputDialog.getItem(self,"select Input dialog","Interference type?",items,0,False)
-    #     if ok and item:
-    #         self.le_loc.setText(item)
 
     def getColor(self):
         items=("colored","mono")

@@ -5,16 +5,12 @@ import numpy as np
 # [0, 0, 0] = origin = center of mirror_G
 # [1, 0, 0] = x-direction = mirror_G to mirror_M2
 # [0, 1, 0] = y-direction = mirror_G to mirror_M1
-# [0, 0, 1] = z-direction, obeying verter product rule
+# [0, 0, 1] = z-direction, obeying verter rule
 
 spec_wavelengths = np.arange(380, 781, 5)
 
 class MichelsonSimulation:
-    # We have a list of point-source, each with its position and wavelength information.
-    # We give central mirror(G), position-changing mirror(M1), direction-changing mirror(M2)
-    # information respectively, including its central point and direction.
-    # All of the above information should be 'np.array' type.
-    # We give a term to control interference type, and the initialize of screen is related to it.
+
     def __init__(self):
         self.source_list = []
         self.mirror_G = []
@@ -74,12 +70,12 @@ class MichelsonSimulation:
         locVector = np.array(loc)
         self.mirror_M2[0] = locVector
 
-    # set M1 mirror(i.e. set its direction) 
+    # set M1 mirror angle (i.e. set its direction) 
     def setMirrorM1(self, direction):
         directionVector = np.array(direction)
         self.mirror_M1[1] = directionVector
 
-    # set M2 mirror(i.e. set its direction)
+    # set M2 mirror angle (i.e. set its direction)
     def setMirrorM2(self, direction):
         directionVector = np.array(direction)
         self.mirror_M2[1] = directionVector
@@ -89,7 +85,7 @@ class MichelsonSimulation:
         movementVector = np.array(movement)
         self.mirror_M1[0] += movementVector
 
-    def moveMirrorM1(self, directionChange): #TODO: experimentally we measure angle, not direction vector, need a converter
+    def moveMirrorM1(self, directionChange): 
         directionVector = np.array(directionChange)
         self.mirror_M1[1] += directionVector
 
@@ -99,7 +95,7 @@ class MichelsonSimulation:
         self.mirror_M2[0] += movementVector
     
     # move M2 mirror(i.e. change its direction)
-    def moveMirrorM2(self, directionChange): #TODO: experimentally we measure angle, not direction vector, need a converter
+    def moveMirrorM2(self, directionChange): 
         directionVector = np.array(directionChange)
         self.mirror_M2[1] += directionVector
     
@@ -109,7 +105,7 @@ class MichelsonSimulation:
     
     # change to non-local interference mode, together with finite-distance-screen
     # we set distance from mirror_G to screen is 30cm
-    def changeToNonlocal(self):
+    def changeTo(self):
         self.islocalInterference = False
         screen = []                         # here initialize screen, 100*100 points, 5cm*5cm
         center = np.array([0, -30, 0])
@@ -119,18 +115,6 @@ class MichelsonSimulation:
                 screen.append(point)
         self.screen = screen
     
-    # change to local interference mode, together with infinite-distance-screen
-    # we only consider the relative position between screen and lens(i.e. our eyes)
-    # thus we set lens as [0, 0, 0], the relative distance is 2cm
-    def changeToLocal(self):
-        self.islocalInterference = True
-        screen = []                         # here initialize screen, 100*100 points, 2cm*2cm
-        center = np.array([0, -2, 0])
-        for i in range(-50, 50):
-            for j in range(-50, 50):
-                point = center + np.array([2 * i / 100, 0, 2 * j /100])
-                screen.append(point)
-        self.screen = screen
         
     def getInterferenceMode(self):
         mode = self.islocalInterference
@@ -187,7 +171,7 @@ class MichelsonSimulation:
     # The output is a list, and the term is like '[position on screen, wavelength, intensity]'
     # Since no interference between different source, we give an output for
     # each source-screenPoint combination, we can get final pattern by simply adding their intensity.
-    def nonlocalInterference(self):
+    def Interference(self):
         enhance_factor = 1e3
 
         if not self.islocalInterference:

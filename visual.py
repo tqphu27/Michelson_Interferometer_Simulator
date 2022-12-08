@@ -19,14 +19,12 @@ def RGBConverter(pattern):
         idx = int((wavelength_arr[i]-380)/5)
         if 0<=idx<np.size(spec_wavelengths):
             spec_map[:,:,idx] += intensity_arr[:,:,i]
-        
+       
     return np.apply_along_axis(cs_hdtv.spec_to_rgb, axis=2, arr=spec_map)
 
 def showPattern(ax, simulation, is_colored=False):
-    # if simulation.islocalInterference:
-    #     pattern = simulation.localInterference()
-    # else:
-    pattern = simulation.nonlocalInterference()
+
+    pattern = simulation.Interference()
     
     if is_colored:
         ax.imshow(RGBConverter(pattern), interpolation='none')
